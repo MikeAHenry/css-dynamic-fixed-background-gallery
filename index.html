@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>Fixed Backgrounds Gallery</title>
+		
+		<style type="text/css" media="screen">
+			
+			
+		* {
+			padding: 0;
+			margin: 0;
+		}
+		
+		html, body {
+			height: 100%;
+		}
+		
+		body {
+			background-color: #c6d2d2; /* #b0c9e8;*/
+			color: #eeffff;
+			text-align: center;
+			font-family: Palatino, Georgia, Serif;
+			/* width will be 100% multipled by n */
+		}
+		
+		#slides-container {
+			height: 100%;
+			width: 100%;
+		}
+		
+		.full {
+			height: 100%;
+			/* width will be 100% divided by n */
+			border: 0;
+			background-attachment: fixed;
+			background-size: cover;
+			float: left;
+			display: table;
+		}
+		
+		.full p {
+			text-shadow: 1px 1px #aaa;
+			font-size: 35px;
+			display: table-cell;
+			text-align: center;
+			vertical-align: middle;
+		}
+		
+		.full p em {
+			font-size: smaller;
+		}
+		
+		.slide {
+			display: none;
+		}
+		
+		
+		.fixed {
+			position: fixed;
+			background-color: rgba(0,0,0,0.5);
+			width: 50px;
+			height: 50px;
+			color: white;
+			font-size: 25px;
+			display: table;
+			border-radius: 50px;
+		}
+		
+		.fixed span {
+			display: table-cell;
+			text-align: center;
+			vertical-align: middle;
+		}
+		
+		.next-link {
+			bottom: 5%;
+			right: 5%;
+		}
+		
+		.next-link span:after {
+			content: "»";
+		}
+		
+		.prev-link {
+			bottom: 5%;
+			left: 5%;
+		}
+		
+		.prev-link span:after {
+			content: "«";
+		}
+		
+		</style>
+		
+	</head>
+
+	<body id="index">
+		<div id="slides-container">
+			<img src="img/c01.jpg" class="slide" alt="Camino de Santiago 2014<br /><br /><em>Scroll right, please.</em>"/>
+			<img src="img/c02.jpg" class="slide" alt="slide">
+			<img src="img/c04.jpg" class="slide" alt="slide">
+			<img src="img/c03.jpg" class="slide" alt="Where will you go?">
+		</div>
+		
+		<div class="fixed next-link" onclick="next()"><span></span></div>
+		<div class="fixed prev-link" onclick="previous()"><span></span></div>
+		
+		<script type="text/javascript">
+		(function() {
+			
+			var slides = document.getElementsByClassName("slide");
+			var numSlides = slides.length;
+			var slidesContainer = document.getElementById("slides-container");
+			
+			var fullRule = ".full {width: "+(100/numSlides)+"%;}";
+			var bodyRule = "body {width: "+100*numSlides+"%;}";
+			
+			document.styleSheets[0].insertRule(fullRule, 1);
+			document.styleSheets[0].insertRule(bodyRule, 1);
+			
+			var img = null;
+			var imgAlt = null;
+			var div = null;
+			var p = null;
+			for(var i = 0; i < numSlides; i++) {
+				img = slides[i];
+				div = document.createElement("div");
+				console.log(img.src);
+				if (img.className.indexOf("blank") == -1) div.style = "background-image: url('"+img.src+"')";
+				div.className += "full";
+				if (img.alt != "slide") {
+					p = document.createElement("p");
+					p.innerHTML = img.alt;
+					div.appendChild(p);
+				}
+				slidesContainer.appendChild(div);
+			}
+			
+			
+			// remove images from DOM
+			for(var i = numSlides - 1; i >= 0; i--) {
+				slidesContainer.removeChild(slides[i]);
+			}
+			
+		})();
+		
+		function next() {
+			var xoff = window.pageXOffset;
+			var width = window.innerWidth;
+			window.scrollTo(Math.ceil((xoff+1)/width)*width, 0);
+			
+		}
+		
+		function previous() {
+			var xoff = window.pageXOffset;
+			var width = window.innerWidth;
+			window.scrollTo(Math.floor((xoff-1)/width)*width, 0);
+		}
+		
+		</script>
+		
+	</body>
+
+</html>
